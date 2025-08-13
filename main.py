@@ -22,10 +22,9 @@ def main():
 
     mp3_path = download_audio(args.url, bitrate=args.bitrate, output_dir=args.output_dir)
     print(t("audio_saved").format(mp3_path))
-
+    
     key, alt_key = estimate_key(mp3_path)
     features = analyze_features(mp3_path)
-
     print(f"{t('detected_key')}: {key}")
     print(f"{t('relative_key')}: {alt_key}")
     print(f"{t('bpm')}: {features['bpm']:.2f}")

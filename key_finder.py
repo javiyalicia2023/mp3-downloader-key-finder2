@@ -7,7 +7,6 @@ KEYS = ['C', 'C#', 'D', 'Eb', 'E', 'F', 'F#', 'G', 'Ab', 'A', 'Bb', 'B']
 
 def estimate_key(file_path: str) -> tuple[str, str]:
     """Estimate the musical key of an audio file and its relative key.
-
     A simple Krumhansl-Schmuckler-like algorithm is applied to the mean chroma
     vector of the audio. The function returns both the detected key and the
     relative ("alternate") key, which is the corresponding relative major or
