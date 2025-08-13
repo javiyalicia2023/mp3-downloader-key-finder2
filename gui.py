@@ -1,5 +1,6 @@
 import os
 import shutil
+import sys
 
 from tkinter import (
     filedialog,
@@ -32,14 +33,16 @@ except Exception:  # pragma: no cover - tkinterdnd2 optional
 from youtube_audio import download_audio
 from key_finder import estimate_key
 from audio_features import analyze_features, describe_score
+from i18n import set_language, t
+
 
 
 class App:
     """Graphical interface for downloading and analyzing audio."""
-
-    def __init__(self) -> None:
+    def __init__(self, lang: str = "en") -> None:
+        set_language(lang)
         self.root = BaseTk()
-        self.root.title("MP3 Downloader & Analyzer")
+        self.root.title(t("app_title"))
         self.root.configure(bg="black")
 
         self.download_dir = StringVar(value="downloads")
@@ -48,14 +51,14 @@ class App:
         dir_frame = Frame(self.root, bg="black")
         dir_frame.pack(padx=10, pady=10, fill=X)
         Label(
-            dir_frame, text="Download directory:", fg="white", bg="black"
+            dir_frame, text=t("download_directory"), fg="white", bg="black"
         ).pack(side=LEFT)
         Entry(dir_frame, textvariable=self.download_dir, width=40).pack(
             side=LEFT, padx=5
         )
         Button(
             dir_frame,
-            text="Browse",
+            text=t("browse"),
             command=self.choose_dir,
             bg="#2F5BF9",
             fg="white",
@@ -64,7 +67,7 @@ class App:
         # URL downloader
         url_frame = Frame(self.root, bg="black")
         url_frame.pack(padx=10, pady=10, fill=X)
-        Label(url_frame, text="YouTube URL:", fg="white", bg="black").pack(side=LEFT)
+        Label(url_frame, text=t("youtube_url"), fg="white", bg="black").pack(side=LEFT)
         self.url_var = StringVar()
         Entry(url_frame, textvariable=self.url_var, width=40).pack(side=LEFT, padx=5)
         self.bitrate_var = StringVar(value="160")
@@ -73,7 +76,7 @@ class App:
         )
         Button(
             url_frame,
-            text="Download",
+            text=t("download"),
             command=self.download_url,
             bg="#2F5BF9",
             fg="white",
@@ -82,12 +85,12 @@ class App:
         # File list
         list_frame = Frame(self.root, bg="black")
         list_frame.pack(padx=10, pady=10, fill=BOTH, expand=True)
-        Label(list_frame, text="Files:", fg="white", bg="black").pack(anchor=NW)
+        Label(list_frame, text=t("files"), fg="white", bg="black").pack(anchor=NW)
         self.listbox = Listbox(list_frame, bg="black", fg="white")
         self.listbox.pack(fill=BOTH, expand=True)
         Button(
             list_frame,
-            text="Analyze Selected",
+            text=t("analyze_selected"),
             command=self.analyze_selected,
             bg="#2F5BF9",
             fg="white",
@@ -96,7 +99,7 @@ class App:
         # Import button
         Button(
             self.root,
-            text="Import and Analyze File",
+            text=t("import_analyze"),
             command=self.import_file,
             bg="#2F5BF9",
             fg="white",
@@ -106,7 +109,7 @@ class App:
         if DND_AVAILABLE:
             drop_label = Label(
                 self.root,
-                text="Drop audio file here",
+                text=t("drop_audio"),
                 fg="white",
                 bg="#2F5BF9",
                 relief="ridge",
@@ -141,7 +144,7 @@ class App:
     def download_url(self) -> None:
         url = self.url_var.get().strip()
         if not url:
-            messagebox.showerror("Error", "Please enter a YouTube URL.")
+            messagebox.showerror(t("error"), t("enter_url"))
             return
         try:
             bitrate = int(self.bitrate_var.get())
@@ -151,12 +154,12 @@ class App:
             self.refresh_file_list()
             self.display_features(path)
         except Exception as exc:  # pragma: no cover - depends on network
-            messagebox.showerror("Download error", str(exc))
+            messagebox.showerror(t("download_error"), str(exc))
 
     def analyze_selected(self) -> None:
         selection = self.listbox.curselection()
         if not selection:
-            messagebox.showinfo("Info", "Select a file to analyze.")
+            messagebox.showinfo(t("info"), t("select_file"))
             return
         filename = self.listbox.get(selection[0])
         path = os.path.join(self.download_dir.get(), filename)
@@ -186,12 +189,12 @@ class App:
         key, alt_key = estimate_key(path)
         feats = analyze_features(path)
         lines = [
-            f"File: {os.path.basename(path)}",
-            f"Key: {key} (Relative: {alt_key})",
-            f"BPM: {feats['bpm']:.2f}",
-            f"Energy: {feats['energy']:.2f} ({describe_score(feats['energy'])})",
-            f"Danceability: {feats['danceability']:.2f} ({describe_score(feats['danceability'])})",
-            f"Happiness: {feats['happiness']:.2f} ({describe_score(feats['happiness'])})",
+            f"{t('file')}: {os.path.basename(path)}",
+            f"{t('detected_key')}: {key} ({t('relative_key')}: {alt_key})",
+            f"{t('bpm')}: {feats['bpm']:.2f}",
+            f"{t('energy')}: {feats['energy']:.2f} ({describe_score(feats['energy'])})",
+            f"{t('danceability')}: {feats['danceability']:.2f} ({describe_score(feats['danceability'])})",
+            f"{t('happiness')}: {feats['happiness']:.2f} ({describe_score(feats['happiness'])})",
             "",
         ]
         self.result_text.delete(1.0, END)
@@ -199,5 +202,6 @@ class App:
 
 
 if __name__ == "__main__":  # pragma: no cover - manual launch
-    App()
+    lang = sys.argv[1] if len(sys.argv) > 1 else "en"
+    App(lang)
 
