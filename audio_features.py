@@ -35,6 +35,7 @@ def analyze_features(file_path: str) -> dict:
     }
 
 
+
 def describe_score(value: float) -> str:
     """Return a qualitative description for a 0-100 feature score."""
     if value < 33:
@@ -42,3 +43,4 @@ def describe_score(value: float) -> str:
     if value < 66:
         return t("medium")
     return t("high")
+

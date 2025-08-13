@@ -1,9 +1,11 @@
 # mp3-downloader-key-finder
 
+
 This command-line tool downloads a YouTube video, extracts the audio as an MP3
 file (160 kbps or 320 kbps), and then analyzes several musical features of the
 track. It reports the detected key along with its relative (alternate) key and
 basic audio metrics such as BPM, energy, danceability and happiness.
+
 
 ## Usage
 
@@ -15,17 +17,20 @@ The downloaded file is stored in the `downloads/` directory and the analyzed
 features are printed to the console. Use `--lang` to switch between English
 (`en`) and Spanish (`es`).
 
+
 ## Graphical interface
 
 For a simple GUI with a black/#2F5BF9/white palette, run:
 
 ```
+
 python gui.py [en|es]
 ```
 
 The interface lets you choose a download directory, enter a YouTube URL and
 bitrate, or import/drag audio files for analysis. Results show the detected
 key, relative key, BPM, energy, danceability and happiness.
+
 
 ### Requirements
 
@@ -49,6 +54,7 @@ python build.py cli  # build command-line executable
 
 The binaries are placed in the `dist/` directory. Build on the target platform
 (Windows or Linux) to produce native executables.
+
 
 ## Audio metrics
 

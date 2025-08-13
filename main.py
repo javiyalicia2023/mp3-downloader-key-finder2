@@ -4,6 +4,7 @@ from youtube_audio import download_audio
 from key_finder import estimate_key
 from audio_features import analyze_features, describe_score
 
+
 def main():
     pre = argparse.ArgumentParser(add_help=False)
     pre.add_argument("--lang", choices=["en", "es"], default="en")
@@ -23,8 +24,10 @@ def main():
     mp3_path = download_audio(args.url, bitrate=args.bitrate, output_dir=args.output_dir)
     print(t("audio_saved").format(mp3_path))
 
+
     key, alt_key = estimate_key(mp3_path)
     features = analyze_features(mp3_path)
+
 
     print(f"{t('detected_key')}: {key}")
     print(f"{t('relative_key')}: {alt_key}")
@@ -32,6 +35,7 @@ def main():
     print(f"{t('energy')}: {features['energy']:.2f} ({describe_score(features['energy'])})")
     print(f"{t('danceability')}: {features['danceability']:.2f} ({describe_score(features['danceability'])})")
     print(f"{t('happiness')}: {features['happiness']:.2f} ({describe_score(features['happiness'])})")
+
 
 if __name__ == "__main__":
     main()
