@@ -36,7 +36,6 @@ from audio_features import analyze_features, describe_score
 from i18n import set_language, t
 
 
-
 class App:
     """Graphical interface for downloading and analyzing audio."""
     def __init__(self, lang: str = "en") -> None:

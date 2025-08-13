@@ -1,73 +1,69 @@
-# mp3-downloader-key-finder
 
+# Descargador de MP3 y analizador de tonalidad
 
-This command-line tool downloads a YouTube video, extracts the audio as an MP3
-file (160 kbps or 320 kbps), and then analyzes several musical features of the
-track. It reports the detected key along with its relative (alternate) key and
-basic audio metrics such as BPM, energy, danceability and happiness.
+Esta herramienta descarga el audio de un enlace de YouTube, lo convierte a MP3 
+(160 kbps o 320 kbps) y analiza la pista para obtener:
 
+- Tonalidad principal y tonalidad relativa
+- BPM (tempo)
+- Niveles de energía, bailabilidad y felicidad (0‑100)
 
-## Usage
+Todo el proyecto puede utilizarse desde la línea de comandos o mediante una 
+pequeña interfaz gráfica.
 
+## Instalación rápida en Windows
+
+1. Descarga o clona este repositorio.
+2. Abre PowerShell **como administrador** dentro de la carpeta del proyecto.
+3. Ejecuta:
+   ```powershell
+   ./setup.ps1
+   ```
+   El script instalará Python, FFmpeg y todas las dependencias, y generará los
+   ejecutables en `dist/`.
+
+## Uso por línea de comandos
+
+```bash
+python main.py <URL_YOUTUBE> [--bitrate 160|320] [--lang es|en]
 ```
-python main.py <youtube_url> [--bitrate 160|320] [--lang en|es]
+
+El archivo MP3 se guarda en la carpeta `downloads/` y en pantalla se muestran la
+clave detectada, la tonalidad relativa y las métricas de BPM, energía,
+bailabilidad y felicidad. Usa `--lang` para elegir idioma (español o inglés).
+
+## Interfaz gráfica
+
+```bash
+python gui.py [es|en]
 ```
 
-The downloaded file is stored in the `downloads/` directory and the analyzed
-features are printed to the console. Use `--lang` to switch between English
-(`en`) and Spanish (`es`).
+La GUI utiliza una paleta negro/#2F5BF9/blanco. Permite seleccionar la carpeta
+de descarga, introducir un enlace de YouTube o arrastrar archivos de audio para
+analizarlos.
 
+## Métricas de audio
 
-## Graphical interface
+Las puntuaciones de energía, bailabilidad y felicidad se expresan en una escala
+0‑100. Se interpretan así:
 
-For a simple GUI with a black/#2F5BF9/white palette, run:
+- 0–33 → nivel **bajo**
+- 34–66 → nivel **medio**
+- 67–100 → nivel **alto**
 
-```
+## Construir ejecutables manualmente
 
-python gui.py [en|es]
-```
+Si ya tienes Python y FFmpeg instalados, instala las dependencias con:
 
-The interface lets you choose a download directory, enter a YouTube URL and
-bitrate, or import/drag audio files for analysis. Results show the detected
-key, relative key, BPM, energy, danceability and happiness.
-
-
-### Requirements
-
-Install dependencies with:
-
-```
+```bash
 pip install -r requirements.txt
 ```
 
-`yt-dlp` relies on `ffmpeg` for conversion to MP3. Ensure `ffmpeg` is available
-on your system.
+Luego ejecuta:
 
-## Executables
-
-Install `pyinstaller` (included in `requirements.txt`) and run:
-
-```
-python build.py gui  # build GUI executable
-python build.py cli  # build command-line executable
+```bash
+python build.py cli  # ejecutable de línea de comandos
+python build.py gui  # ejecutable con interfaz gráfica
 ```
 
-The binaries are placed in the `dist/` directory. Build on the target platform
-(Windows or Linux) to produce native executables.
-
-
-## Audio metrics
-
-The analysis module reports three additional scores on a 0-100 scale:
-
-- **Energy** – approximates the loudness and intensity of the track using RMS
-  energy. Values near 0 indicate calm or quiet audio, while values near 100
-  represent very energetic material.
-- **Danceability** – derived from onset strength and hints at how suitable a
-  track is for dancing. Higher numbers suggest a more pronounced and stable
-  beat.
-- **Happiness** – uses spectral centroid as a proxy for brightness; lower scores
-  correspond to darker or sadder timbres, whereas higher scores imply brighter,
-  more cheerful sounds.
-
-Interpretation guide: 0–33 → low, 34–66 → medium, 67–100 → high.
+Los binarios resultantes se guardan en `dist/`.
