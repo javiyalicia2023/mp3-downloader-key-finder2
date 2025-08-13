@@ -6,8 +6,10 @@ def analyze_features(file_path: str) -> dict:
     """Calculate basic audio features for the given file.
 
     Returns a dictionary with BPM, energy, danceability and happiness scores.
+
     All feature scores are normalised to a 0-100 scale where higher values
     indicate a stronger presence of that quality.
+
     """
     y, sr = librosa.load(file_path)
 
@@ -34,6 +36,7 @@ def analyze_features(file_path: str) -> dict:
     }
 
 
+
 def describe_score(value: float) -> str:
     """Return a qualitative description for a 0-100 feature score."""
     if value < 33:
@@ -41,3 +44,4 @@ def describe_score(value: float) -> str:
     if value < 66:
         return "medium"
     return "high"
+
