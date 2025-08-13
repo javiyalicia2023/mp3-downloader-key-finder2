@@ -1,0 +1,5 @@
+yt-dlp
+librosa
+numpy
+tkinterdnd2
+pyinstaller
